@@ -114,20 +114,17 @@ const ApiButton = ({ searchQuery }) => {
                 useAutoprompt: true,
             });
 */
-
-            console.log('Bruh');
+            console.log('Calling the API');
             const response = await metaphor_query(searchQuery);
-
+            console.log('Done calling the api' +  response);
             setApiResponse(response);
-
-            console.log(response);
 
             const paperIds = response.results.map((paper) => paper.id);
             const responsesArray = await metaphor.getContents(paperIds);
             const extracts = responsesArray.contents.map((x) => {
                 const $ = cheerio.load(x.extract);
                 const extracted = $('div blockquote').text().trim();
-                console.log('Summarizing ' + extracted);
+                //console.log('Summarizing ' + extracted);
                 return query({ "inputs": extracted }).then((response) => response[0].summary_text);
             });
             setContents(extracts);
