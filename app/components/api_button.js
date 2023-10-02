@@ -3,6 +3,7 @@ import Metaphor from 'metaphor-node';
 import cheerio from 'cheerio';
 
 const api_key = process.env.NEXT_PUBLIC_API_KEY;
+const metaphor = new Metaphor(api_key);
 const hf_api_key = process.env.NEXT_PUBLIC_HF_API_KEY;
 
 function formatDate(inputDate) {
@@ -53,12 +54,6 @@ const ApiButton = ({ searchQuery }) => {
     const [apiResponse, setApiResponse] = useState('');
     const [contents, setContents] = useState(null);
 
-    console.log('before metaphor');
-    const metaphor = new Metaphor(api_key);
-    console.log(api_key);
-
-    console.log('metaphor created');
-
     useEffect(() => {
         const intervalId = setInterval(() => {
             if (ready) {
@@ -83,7 +78,7 @@ const ApiButton = ({ searchQuery }) => {
     }, [ready]);
 
     const handleApiCall = async () => {
-        console.log('Running Handle Call on Query : ' + {searchQuery});
+        console.log('Running Handle Call on Query : ' + searchQuery);
         setIsLoading(true);
         try {
             const response = await metaphor.search(`Recent papers in ${searchQuery}`, {
