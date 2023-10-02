@@ -51,7 +51,7 @@ async function metaphor_query(query) {
         headers: {
             accept: 'application/json',
             'content-type': 'application/json',
-            'x-api-key': '44840301-0375-4495-87bf-922ab49a8645'
+            'x-api-key': api_key
         },
         body: JSON.stringify({
             query: `Recent papers in ${query}`, 
