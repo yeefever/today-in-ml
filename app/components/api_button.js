@@ -168,7 +168,6 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
                 return ret;
             });
             setContents(extracts);
-
         } catch (error) {
             console.error('API call error:', error);
         } finally {
