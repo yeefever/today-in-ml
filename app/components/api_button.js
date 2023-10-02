@@ -91,8 +91,8 @@ async function metaphor_query(query, date) {
 
 const ApiButton = ({ searchQuery, dateDiff }) => {
     const [ready, setReady] = useState(false);
-    const [showRelatedContent, setShowRelatedContent] = useState([{ key: 0, value: false}, { key: 1, value: false},{ key: 3, value: false}, { key: 4, value: false}]);
-    const [relatedContent, setRelatedContent] = useState([{ key: 0, value: null }, { key: 1, value: null}, { key: 3, value: null }, { key: 4, value: null}]);
+    const [showRelatedContent, setShowRelatedContent] = useState([false, false, false, false]);
+    const [relatedContent, setRelatedContent] = useState([[], [], [], []]);
     const [isLoading, setIsLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState('');
     const [contents, setContents] = useState(null);
@@ -110,7 +110,7 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
                     setReady(true);
                 }
             });
-        }, 3000);
+        }, 10000);
 
         if (ready) {
             clearInterval(intervalId);
@@ -173,6 +173,7 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
             console.error('API call error:', error);
         } finally {
             setIsLoading(false);
+            setShowRelatedContent([false, false, false, false]);
         }
     };
 
@@ -183,7 +184,11 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
             )}
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 {ready && (
-                    <button onClick={handleApiCall} disabled={isLoading}>
+                    <button
+                        onClick={handleApiCall}
+                        disabled={isLoading}
+                        className="bg-slate-600 text-white hover:bg-slate-900 text-xl"
+                    >
                         {isLoading ? 'Loading' : 'Search'}
                     </button>
                 )}
@@ -196,7 +201,7 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
                             <div className="flex justify-between items-center">
                                 <h2 className="text-xl font-semibold mb-1">{paper.title}</h2>
                                 <button
-                                    onClick={(e) => {handleMoreLikeThisClick(paper, index)}}
+                                    onClick={(e) => { handleMoreLikeThisClick(paper, index) }}
                                     className="text-blue-500 hover:underline font-semibold"
                                 >
                                     {showRelatedContent[index] ? 'Hide Related' : 'Show Similar'}
@@ -214,15 +219,15 @@ const ApiButton = ({ searchQuery, dateDiff }) => {
                                 Read More
                             </a>
                             {showRelatedContent[index] && (
-                            <div>
-                                <h3 className="text-lg font-semibold mt-4">Related Content:</h3>
-                                {relatedContent[index].map((item, index) => (
-                                    <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                                    {item.title} <br/>
-                                  </a>
-                                ))}
-                            </div>
-                        )}
+                                <div>
+                                    <h3 className="text-lg font-semibold mt-4">Related Content:</h3>
+                                    {relatedContent[index].map((item, index) => (
+                                        <a href={item.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
+                                            {item.title} <br />
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                     ))}
