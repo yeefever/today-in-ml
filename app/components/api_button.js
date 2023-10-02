@@ -3,7 +3,6 @@ import Metaphor from 'metaphor-node';
 import cheerio from 'cheerio';
 
 const api_key = process.env.NEXT_PUBLIC_API_KEY;
-const metaphor = new Metaphor(api_key);
 const hf_api_key = process.env.NEXT_PUBLIC_HF_API_KEY;
 
 function formatDate(inputDate) {
@@ -53,6 +52,7 @@ const ApiButton = ({ searchQuery }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState('');
     const [contents, setContents] = useState(null);
+    const metaphor = new Metaphor(api_key);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -78,10 +78,9 @@ const ApiButton = ({ searchQuery }) => {
     }, [ready]);
 
     const handleApiCall = async () => {
-        console.log('Running Handle Call on Query : ' + searchQuery);
+        console.log('Running Handle Call');
         setIsLoading(true);
         try {
-            console.log('Searching Query');
             const response = await metaphor.search(`Recent papers in ${searchQuery}`, {
                 numResults: 2,
                 includeDomains: ["https://arxiv.org", "https://scholar.google.com", "https://nips.cc", "https://icml.cc", "http://www.jmlr.org", "https://www.mitpressjournals.org", "https://dl.acm.org", "https://ieeexplore.ieee.org"],
@@ -91,7 +90,7 @@ const ApiButton = ({ searchQuery }) => {
 
             setApiResponse(response);
 
-            console.log('Response: ' + response);
+            console.log(response);
 
             const paperIds = response.results.map((paper) => paper.id);
             const responsesArray = await metaphor.getContents(paperIds);
@@ -102,13 +101,12 @@ const ApiButton = ({ searchQuery }) => {
                 return query({ "inputs": extracted }).then((response) => response[0].summary_text);
             });
             setContents(extracts);
-            console.log('extracts: ', extracts);
+
         } catch (error) {
             console.error('API call error:', error);
         } finally {
             setIsLoading(false);
         }
-        console.log('done');
     };
 
     return (
