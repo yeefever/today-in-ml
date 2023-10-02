@@ -49,7 +49,6 @@ async function metaphor_query(query) {
     const options = {
         method: 'POST',
         headers: {
-            accept: 'application/json',
             'content-type': 'application/json',
             'x-api-key': api_key
         },
@@ -61,7 +60,7 @@ async function metaphor_query(query) {
             useAutoprompt: true, 
         })
     };
-    const response = await fetch('https://api.metaphor.systems/search', options)
+    const response = await fetch("https://api.metaphor.systems/search", options)
     const result = await response.json();
     return result;
 
@@ -124,7 +123,7 @@ const ApiButton = ({ searchQuery }) => {
             const extracts = responsesArray.contents.map((x) => {
                 const $ = cheerio.load(x.extract);
                 const extracted = $('div blockquote').text().trim();
-                //console.log('Summarizing ' + extracted);
+                console.log('Summarizing ' + extracted);
                 return query({ "inputs": extracted }).then((response) => response[0].summary_text);
             });
             setContents(extracts);
@@ -150,9 +149,9 @@ const ApiButton = ({ searchQuery }) => {
                     {apiResponse.results.map((paper, index) => (
                         <div key={index} className="p-4 border rounded-md shadow-md">
                             <h3 className="text-lg font-semibold">{paper.title}</h3>
-                            <p>Published: {formatDate(paper.publishedDate)}</p>
+                            <p> {contents[index]} </p>
                             <p>Authors: {paper.author}</p>
-                            <p>Contents: {contents[index]} </p>
+                            <p>Published  {formatDate(paper.publishedDate)}</p>
                             <a
                                 href={paper.url}
                                 target="_blank"
