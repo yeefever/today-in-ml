@@ -45,6 +45,29 @@ async function query(data) {
     return result;
 }
 
+async function metaphor_query(query) {
+    const options = {
+        method: 'POST',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'x-api-key': '44840301-0375-4495-87bf-922ab49a8645'
+        },
+        body: JSON.stringify({
+            query: `Recent papers in ${query}`, 
+            numResults: 2,
+            includeDomains: ["https://arxiv.org", "https://scholar.google.com", "https://nips.cc", "https://icml.cc", "http://www.jmlr.org", "https://www.mitpressjournals.org", "https://dl.acm.org", "https://ieeexplore.ieee.org"],
+            startPublishedDate: "2023-05-10",
+            useAutoprompt: true, 
+        })
+    };
+    const response = await fetch('https://api.metaphor.systems/search', options)
+    const result = await response.json();
+    return result;
+
+}
+
+
 const ApiButton = ({ searchQuery }) => {
     const [ready, setReady] = useState(false);
     const [apiStatus, setApiStatus] = useState(null);
@@ -68,7 +91,7 @@ const ApiButton = ({ searchQuery }) => {
                     setReady(true);
                 }
             });
-        }, 10000);
+        }, 3000);
 
         if (ready) {
             clearInterval(intervalId);
@@ -81,12 +104,19 @@ const ApiButton = ({ searchQuery }) => {
         console.log('Running Handle Call');
         setIsLoading(true);
         try {
+
+
+            /*
             const response = await metaphor.search(`Recent papers in ${searchQuery}`, {
                 numResults: 2,
                 includeDomains: ["https://arxiv.org", "https://scholar.google.com", "https://nips.cc", "https://icml.cc", "http://www.jmlr.org", "https://www.mitpressjournals.org", "https://dl.acm.org", "https://ieeexplore.ieee.org"],
                 startPublishedDate: "2023-05-10",
                 useAutoprompt: true,
             });
+*/
+
+            console.log('Bruh');
+            const response = await metaphor_query(searchQuery);
 
             setApiResponse(response);
 
