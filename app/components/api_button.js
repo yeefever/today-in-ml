@@ -52,7 +52,11 @@ const ApiButton = ({ searchQuery }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState('');
     const [contents, setContents] = useState(null);
+
+    print('before metaphor');
     const metaphor = new Metaphor(api_key);
+
+    print('metaphor created');
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -78,7 +82,7 @@ const ApiButton = ({ searchQuery }) => {
     }, [ready]);
 
     const handleApiCall = async () => {
-        console.log('Running Handle Call');
+        console.log('Running Handle Call on Query : ' + {searchQuery});
         setIsLoading(true);
         try {
             const response = await metaphor.search(`Recent papers in ${searchQuery}`, {
@@ -107,6 +111,7 @@ const ApiButton = ({ searchQuery }) => {
         } finally {
             setIsLoading(false);
         }
+        console.log('done');
     };
 
     return (
