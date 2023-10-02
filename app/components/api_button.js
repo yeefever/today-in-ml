@@ -53,10 +53,11 @@ const ApiButton = ({ searchQuery }) => {
     const [apiResponse, setApiResponse] = useState('');
     const [contents, setContents] = useState(null);
 
-    print('before metaphor');
+    console.log('before metaphor');
     const metaphor = new Metaphor(api_key);
+    console.log(api_key);
 
-    print('metaphor created');
+    console.log('metaphor created');
 
     useEffect(() => {
         const intervalId = setInterval(() => {
