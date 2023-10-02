@@ -78,6 +78,7 @@ const ApiButton = ({ searchQuery }) => {
     }, [ready]);
 
     const handleApiCall = async () => {
+        console.log('Running Handle Call');
         setIsLoading(true);
         try {
             const response = await metaphor.search(`Recent papers in ${searchQuery}`, {
@@ -88,6 +89,8 @@ const ApiButton = ({ searchQuery }) => {
             });
 
             setApiResponse(response);
+
+            console.log(response);
 
             const paperIds = response.results.map((paper) => paper.id);
             const responsesArray = await metaphor.getContents(paperIds);
